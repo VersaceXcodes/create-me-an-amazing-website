@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import cors from "cors";
 import dotenv from "dotenv";
 import fs from "fs";
@@ -11,13 +11,23 @@ import bcrypt from 'bcryptjs';
 
 dotenv.config();
 
-const { DATABASE_URL, PGHOST, PGDATABASE, PGUSER, PGPASSWORD, PGPORT = 5432 } = process.env;
+// Extend Express Request type to include user property
+interface AuthenticatedRequest extends Request {
+  user?: {
+    id: number;
+    email: string;
+    name: string;
+    created_at: Date;
+  };
+}
+
+const { DATABASE_URL, PGHOST, PGDATABASE, PGUSER, PGPASSWORD, PGPORT = 5432, JWT_SECRET = 'your-secret-key-change-in-production' } = process.env;
 
 const pool = new Pool(
   DATABASE_URL
     ? { 
         connectionString: DATABASE_URL, 
-        ssl: { require: true } 
+        ssl: { rejectUnauthorized: false } 
       }
     : {
         host: PGHOST,
@@ -25,7 +35,7 @@ const pool = new Pool(
         user: PGUSER,
         password: PGPASSWORD,
         port: Number(PGPORT),
-        ssl: { require: true },
+        ssl: { rejectUnauthorized: false },
       }
 );
 
@@ -52,7 +62,7 @@ app.use(cors({
 app.use(express.json());
 
 // Auth middleware
-const authenticate_token = async (req, res, next) => {
+const authenticate_token = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
 
@@ -61,7 +71,7 @@ const authenticate_token = async (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, JWT_SECRET);
+    const decoded = jwt.verify(token, JWT_SECRET) as { user_id: number; email: string };
     const result = await pool.query(
       'SELECT id, email, name, created_at FROM users WHERE id = $1', 
       [decoded.user_id]
@@ -203,35 +213,35 @@ app.post('/api/auth/login', async (req, res) => {
 });
 
 // Verify token endpoint
-app.get('/api/auth/verify', authenticate_token, (req, res) => {
+app.get('/api/auth/verify', authenticate_token, (req: AuthenticatedRequest, res: Response) => {
   res.json({
     message: 'Token is valid',
     user: {
-      id: req.user.id,
-      email: req.user.email,
-      name: req.user.name,
-      created_at: req.user.created_at
+      id: req.user!.id,
+      email: req.user!.email,
+      name: req.user!.name,
+      created_at: req.user!.created_at
     }
   });
 });
 
 // Get current user endpoint
-app.get('/api/auth/me', authenticate_token, (req, res) => {
+app.get('/api/auth/me', authenticate_token, (req: AuthenticatedRequest, res: Response) => {
   res.json({
     user: {
-      id: req.user.id,
-      email: req.user.email,
-      name: req.user.name,
-      created_at: req.user.created_at
+      id: req.user!.id,
+      email: req.user!.email,
+      name: req.user!.name,
+      created_at: req.user!.created_at
     }
   });
 });
 
 // Update user profile endpoint
-app.put('/api/auth/profile', authenticate_token, async (req, res) => {
+app.put('/api/auth/profile', authenticate_token, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const { name } = req.body;
-    const user_id = req.user.id;
+    const user_id = req.user!.id;
 
     if (!name || name.trim().length === 0) {
       return res.status(400).json({ message: 'Name is required' });
@@ -258,13 +268,13 @@ app.put('/api/auth/profile', authenticate_token, async (req, res) => {
 });
 
 // Example protected endpoint
-app.get('/api/protected', authenticate_token, (req, res) => {
+app.get('/api/protected', authenticate_token, (req: AuthenticatedRequest, res: Response) => {
   res.json({
     message: 'This is a protected endpoint',
     user: {
-      id: req.user.id,
-      email: req.user.email,
-      name: req.user.name,
+      id: req.user!.id,
+      email: req.user!.email,
+      name: req.user!.name,
     },
     timestamp: new Date().toISOString()
   });
