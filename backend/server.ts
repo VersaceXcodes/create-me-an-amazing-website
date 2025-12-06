@@ -8,6 +8,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
+import { PGlite } from '@electric-sql/pglite';
 
 dotenv.config();
 
@@ -23,23 +24,44 @@ interface AuthenticatedRequest extends Request {
 
 const { DATABASE_URL, PGHOST, PGDATABASE, PGUSER, PGPASSWORD, PGPORT = 5432, JWT_SECRET = 'your-secret-key-change-in-production' } = process.env;
 
-const pool = new Pool(
-  DATABASE_URL
-    ? { 
-        connectionString: DATABASE_URL, 
-        ssl: { rejectUnauthorized: false } 
-      }
-    : {
-        host: PGHOST,
-        database: PGDATABASE,
-        user: PGUSER,
-        password: PGPASSWORD,
-        port: Number(PGPORT),
-        ssl: { rejectUnauthorized: false },
-      }
-);
+// Use PGlite for local development/testing when no DATABASE_URL is provided
+let pgliteDb: PGlite | null = null;
+let pool: any;
 
-// const client = await pool.connect();
+if (!DATABASE_URL && !PGHOST) {
+  // Use PGlite for in-memory database
+  console.log('Using PGlite in-memory database');
+  pgliteDb = new PGlite();
+  
+  // Create a Pool-like interface for PGlite
+  pool = {
+    query: async (text: string, params?: any[]) => {
+      const result = await pgliteDb!.query(text, params);
+      return {
+        rows: result.rows,
+        rowCount: result.rows.length,
+      };
+    },
+  };
+} else {
+  // Use regular PostgreSQL
+  console.log('Using PostgreSQL database');
+  pool = new Pool(
+    DATABASE_URL
+      ? { 
+          connectionString: DATABASE_URL, 
+          ssl: { rejectUnauthorized: false } 
+        }
+      : {
+          host: PGHOST,
+          database: PGDATABASE,
+          user: PGUSER,
+          password: PGPASSWORD,
+          port: Number(PGPORT),
+          ssl: { rejectUnauthorized: false },
+        }
+  );
+}
 
 const app = express();
 
@@ -92,19 +114,33 @@ const authenticate_token = async (req: AuthenticatedRequest, res: Response, next
 // Database initialization
 const initialize_database = async () => {
   try {
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS users (
-        id SERIAL PRIMARY KEY,
-        email VARCHAR(255) UNIQUE NOT NULL,
-        password VARCHAR(255) NOT NULL,
-        name VARCHAR(255) NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      )
-    `);
+    if (pgliteDb) {
+      // For PGlite, we need to create tables synchronously
+      await pgliteDb.exec(`
+        CREATE TABLE IF NOT EXISTS users (
+          id SERIAL PRIMARY KEY,
+          email VARCHAR(255) UNIQUE NOT NULL,
+          password VARCHAR(255) NOT NULL,
+          name VARCHAR(255) NOT NULL,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+      `);
+    } else {
+      // For regular PostgreSQL
+      await pool.query(`
+        CREATE TABLE IF NOT EXISTS users (
+          id SERIAL PRIMARY KEY,
+          email VARCHAR(255) UNIQUE NOT NULL,
+          password VARCHAR(255) NOT NULL,
+          name VARCHAR(255) NOT NULL,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+      `);
+    }
     console.log('Database initialized successfully');
   } catch (error) {
     console.error('Database initialization error:', error);
-    process.exit(1);
+    throw error;
   }
 };
 
