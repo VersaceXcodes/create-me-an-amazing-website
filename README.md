@@ -1,2 +1,3 @@
-# create-me-an-amazing-website
-Project create-me-an-amazing-website generated.
+app generated from cofounder/boilerplate
+
+instructions here on how to start api and frontend , whether in parallel or separately
