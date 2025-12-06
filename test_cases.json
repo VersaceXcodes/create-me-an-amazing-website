@@ -1,0 +1,682 @@
+{
+  "generated_at": "2025-12-06T10:30:00Z",
+  "project_name": "LaunchPulse Authentication App - Test Cases",
+  "application_url": "https://123create-me-an-amazing-website.launchpulse.ai",
+  "total_test_cases": 32,
+  "test_categories": [
+    "functionality",
+    "authentication",
+    "interface",
+    "api",
+    "security",
+    "navigation",
+    "validation",
+    "error_handling",
+    "performance"
+  ],
+  "testCases": [
+    {
+      "id": "functional-app-test",
+      "name": "Functional Application Test",
+      "category": "functionality",
+      "priority": "critical",
+      "description": "Verify the application has actual functionality beyond basic placeholder content",
+      "steps": [
+        "Navigate to https://123create-me-an-amazing-website.launchpulse.ai",
+        "Verify page loads without errors",
+        "Check for interactive elements (forms, buttons, input fields)",
+        "Verify navigation structure exists",
+        "Confirm application has real features, not just 'Vite + React' placeholder text",
+        "Verify professional UI design with TailwindCSS styling"
+      ],
+      "expectedOutcome": "Application displays functional authentication system with login/register forms, not a placeholder page",
+      "failureCondition": "If page only shows 'Vite + React' placeholder or has no interactive elements, this test should FAIL",
+      "automated": false
+    },
+    {
+      "id": "ui-components-test",
+      "name": "UI Components Functionality Test",
+      "category": "interface",
+      "priority": "high",
+      "description": "Test that UI components are properly implemented and interactive",
+      "steps": [
+        "Navigate to the application",
+        "Verify login form is visible with email and password fields",
+        "Check for 'Sign in' and 'Sign up' toggle button",
+        "Test form inputs are functional and accept user input",
+        "Verify buttons are clickable and respond to hover states",
+        "Check for loading spinners during authentication",
+        "Verify error message display area exists"
+      ],
+      "expectedOutcome": "All UI components render correctly and respond to user interactions with proper styling",
+      "automated": true,
+      "testFile": "vitereact/src/__tests__/auth.e2e.test.tsx"
+    },
+    {
+      "id": "content-quality-test",
+      "name": "Content Quality and Design Test",
+      "category": "interface",
+      "priority": "high",
+      "description": "Verify application has meaningful content and professional appearance",
+      "steps": [
+        "Navigate to application",
+        "Verify proper heading structure ('Sign in to your account' / 'Create your account')",
+        "Check for professional color scheme (blue accent colors)",
+        "Verify responsive design on different screen sizes",
+        "Confirm proper spacing and layout using TailwindCSS",
+        "Check for accessibility features (labels, ARIA attributes)",
+        "Verify no placeholder or lorem ipsum text"
+      ],
+      "expectedOutcome": "Application demonstrates professional design with meaningful, production-ready content",
+      "automated": false
+    },
+    {
+      "id": "user-registration-test",
+      "name": "User Registration Flow",
+      "category": "authentication",
+      "priority": "critical",
+      "description": "Test complete user registration process from form submission to successful account creation",
+      "steps": [
+        "Navigate to application",
+        "Click 'Don't have an account? Sign up' link to toggle to registration mode",
+        "Verify registration form shows name, email, and password fields",
+        "Enter valid name: 'Test User'",
+        "Enter valid email: 'testuser@example.com' (use unique email per test)",
+        "Enter valid password: 'TestPass123!' (minimum 6 characters)",
+        "Click 'Create account' button",
+        "Verify loading state displays during registration",
+        "Confirm successful registration redirects to dashboard",
+        "Verify JWT token is stored in localStorage",
+        "Confirm user data is visible in dashboard"
+      ],
+      "expectedOutcome": "User successfully registers, receives JWT token, and is redirected to authenticated dashboard with user information displayed",
+      "failureCondition": "Registration fails, error displayed, or user not redirected to dashboard",
+      "automated": true,
+      "testFile": "vitereact/src/__tests__/auth.e2e.test.tsx",
+      "apiEndpoint": "POST /api/auth/register"
+    },
+    {
+      "id": "user-login-test",
+      "name": "User Login Flow",
+      "category": "authentication",
+      "priority": "critical",
+      "description": "Test user login with existing credentials",
+      "steps": [
+        "Ensure test user exists (email: 'logintest@example.com', password: 'LoginPass123!')",
+        "Navigate to application login page",
+        "Verify login form is in login mode (not registration)",
+        "Enter existing email: 'logintest@example.com'",
+        "Enter correct password: 'LoginPass123!'",
+        "Click 'Sign in' button",
+        "Verify loading spinner appears",
+        "Confirm successful login redirects to dashboard",
+        "Verify JWT token is stored",
+        "Confirm user name and email displayed in dashboard"
+      ],
+      "expectedOutcome": "User successfully logs in and is redirected to dashboard with authentication token stored",
+      "failureCondition": "Login fails with valid credentials or no redirect occurs",
+      "automated": true,
+      "testFile": "vitereact/src/__tests__/auth.e2e.test.tsx",
+      "apiEndpoint": "POST /api/auth/login"
+    },
+    {
+      "id": "logout-test",
+      "name": "User Logout Flow",
+      "category": "authentication",
+      "priority": "high",
+      "description": "Test user logout functionality and session clearing",
+      "steps": [
+        "Login as test user first",
+        "Navigate to dashboard",
+        "Verify 'Sign out' button is visible in navigation",
+        "Click 'Sign out' button",
+        "Verify user is redirected to login page",
+        "Confirm JWT token is removed from localStorage",
+        "Verify Zustand store is cleared of user data",
+        "Attempt to navigate to /dashboard directly",
+        "Confirm redirect back to /login page"
+      ],
+      "expectedOutcome": "User successfully logs out, all authentication data cleared, and protected routes become inaccessible",
+      "failureCondition": "User remains logged in, token persists, or can access protected routes after logout",
+      "automated": true,
+      "apiEndpoint": "N/A (client-side state clearing)"
+    },
+    {
+      "id": "protected-route-test",
+      "name": "Protected Route Access Control",
+      "category": "authentication",
+      "priority": "critical",
+      "description": "Verify unauthenticated users cannot access protected routes",
+      "steps": [
+        "Clear localStorage to ensure no authentication token exists",
+        "Attempt to navigate directly to /dashboard",
+        "Verify automatic redirect to /login page",
+        "Confirm no dashboard content is visible",
+        "Verify ProtectedRoute component is functioning",
+        "Check that loading spinner appears briefly during auth check"
+      ],
+      "expectedOutcome": "Unauthenticated users are immediately redirected to login page when attempting to access protected routes",
+      "failureCondition": "Dashboard is accessible without authentication or no redirect occurs",
+      "automated": true,
+      "testFile": "vitereact/src/App.tsx:28-42"
+    },
+    {
+      "id": "token-verification-test",
+      "name": "JWT Token Verification",
+      "category": "authentication",
+      "priority": "high",
+      "description": "Test JWT token verification on protected endpoints",
+      "steps": [
+        "Register or login to obtain valid JWT token",
+        "Make GET request to /api/auth/verify with valid token in Authorization header",
+        "Verify 200 response with user data",
+        "Make request with invalid token",
+        "Verify 403 response with 'Invalid or expired token' message",
+        "Make request without token",
+        "Verify 401 response with 'Access token required' message"
+      ],
+      "expectedOutcome": "Valid tokens are accepted, invalid tokens are rejected with appropriate error messages",
+      "failureCondition": "Invalid tokens accepted or valid tokens rejected",
+      "automated": true,
+      "apiEndpoint": "GET /api/auth/verify"
+    },
+    {
+      "id": "session-persistence-test",
+      "name": "Session Persistence on Page Refresh",
+      "category": "authentication",
+      "priority": "high",
+      "description": "Test that user session persists after page refresh using Zustand persist",
+      "steps": [
+        "Login as test user",
+        "Verify user is on dashboard",
+        "Refresh the browser page (F5 or Cmd+R)",
+        "Verify user remains authenticated",
+        "Confirm dashboard still displays user information",
+        "Check localStorage contains auth token",
+        "Verify no redirect to login page occurs",
+        "Confirm initialize_auth function executed on mount"
+      ],
+      "expectedOutcome": "User session persists across page refreshes, user remains logged in",
+      "failureCondition": "User is logged out after refresh or redirected to login",
+      "automated": true
+    },
+    {
+      "id": "registration-validation-email-test",
+      "name": "Registration Email Validation",
+      "category": "validation",
+      "priority": "high",
+      "description": "Test email validation during registration",
+      "steps": [
+        "Navigate to registration form",
+        "Enter invalid email formats: 'notanemail', 'test@', '@example.com'",
+        "Attempt to submit form",
+        "Verify browser/client-side validation prevents submission",
+        "Enter valid email format",
+        "Verify form can be submitted"
+      ],
+      "expectedOutcome": "Invalid email formats are rejected, valid formats accepted",
+      "failureCondition": "Invalid emails accepted or valid emails rejected",
+      "automated": true
+    },
+    {
+      "id": "registration-validation-password-test",
+      "name": "Registration Password Length Validation",
+      "category": "validation",
+      "priority": "high",
+      "description": "Test password length validation (minimum 6 characters)",
+      "steps": [
+        "Navigate to registration form",
+        "Enter name and valid email",
+        "Enter password with 5 characters: 'Pass1'",
+        "Submit form",
+        "Verify error message: 'Password must be at least 6 characters long'",
+        "Enter password with 6 characters: 'Pass12'",
+        "Submit form",
+        "Verify registration proceeds (if email is new)"
+      ],
+      "expectedOutcome": "Passwords shorter than 6 characters are rejected with clear error message",
+      "failureCondition": "Short passwords accepted or no error message displayed",
+      "automated": true,
+      "apiEndpoint": "POST /api/auth/register"
+    },
+    {
+      "id": "registration-validation-name-test",
+      "name": "Registration Name Field Validation",
+      "category": "validation",
+      "priority": "medium",
+      "description": "Test that name field is required during registration",
+      "steps": [
+        "Navigate to registration form",
+        "Enter valid email and password",
+        "Leave name field empty",
+        "Attempt to submit form",
+        "Verify HTML5 required validation triggers",
+        "Or verify backend returns 'All fields are required' error"
+      ],
+      "expectedOutcome": "Empty name field prevents registration",
+      "failureCondition": "Registration succeeds without name",
+      "automated": true
+    },
+    {
+      "id": "duplicate-email-test",
+      "name": "Duplicate Email Registration Prevention",
+      "category": "validation",
+      "priority": "high",
+      "description": "Test that duplicate email addresses are rejected",
+      "steps": [
+        "Register user with email: 'duplicate@example.com'",
+        "Verify first registration succeeds",
+        "Attempt to register again with same email: 'duplicate@example.com'",
+        "Submit registration form",
+        "Verify error message: 'User with this email already exists'",
+        "Verify HTTP 400 status code returned",
+        "Confirm no second user account created"
+      ],
+      "expectedOutcome": "Duplicate email registration is rejected with clear error message",
+      "failureCondition": "Multiple accounts created with same email",
+      "automated": true,
+      "apiEndpoint": "POST /api/auth/register"
+    },
+    {
+      "id": "login-invalid-credentials-test",
+      "name": "Login with Invalid Credentials",
+      "category": "error_handling",
+      "priority": "high",
+      "description": "Test error handling for invalid login credentials",
+      "steps": [
+        "Navigate to login form",
+        "Enter non-existent email: 'nonexistent@example.com'",
+        "Enter any password",
+        "Submit form",
+        "Verify error message: 'Invalid email or password'",
+        "Verify HTTP 400 status code",
+        "Confirm no authentication token generated",
+        "Test with existing email but wrong password",
+        "Verify same generic error message (security best practice)"
+      ],
+      "expectedOutcome": "Invalid credentials rejected with generic error message, no specific indication of which field is wrong",
+      "failureCondition": "Login succeeds with invalid credentials or error reveals which field is incorrect",
+      "automated": true,
+      "apiEndpoint": "POST /api/auth/login"
+    },
+    {
+      "id": "login-missing-fields-test",
+      "name": "Login with Missing Fields",
+      "category": "validation",
+      "priority": "medium",
+      "description": "Test validation when login fields are empty",
+      "steps": [
+        "Navigate to login form",
+        "Leave email field empty",
+        "Enter password",
+        "Attempt to submit",
+        "Verify HTML5 validation or error message",
+        "Enter email, leave password empty",
+        "Attempt to submit",
+        "Verify validation prevents submission"
+      ],
+      "expectedOutcome": "Form cannot be submitted with missing required fields",
+      "failureCondition": "Incomplete form is submitted",
+      "automated": true
+    },
+    {
+      "id": "error-message-display-test",
+      "name": "Error Message Display",
+      "category": "error_handling",
+      "priority": "medium",
+      "description": "Test that error messages are properly displayed to users",
+      "steps": [
+        "Trigger various errors (invalid login, duplicate email, etc.)",
+        "Verify error message appears in red alert box",
+        "Check error message styling (red background, border, text)",
+        "Verify error is stored in Zustand store",
+        "Toggle between login/register modes",
+        "Verify error clears when mode changes (clear_auth_error called)",
+        "Verify error persists until cleared"
+      ],
+      "expectedOutcome": "Error messages displayed prominently with clear styling and proper clearing behavior",
+      "failureCondition": "Errors not visible or persist when they shouldn't",
+      "automated": true
+    },
+    {
+      "id": "loading-state-test",
+      "name": "Loading State Indicators",
+      "category": "interface",
+      "priority": "medium",
+      "description": "Test loading indicators during async operations",
+      "steps": [
+        "Navigate to login form",
+        "Submit login credentials",
+        "Verify loading spinner appears immediately",
+        "Check button shows 'Signing in...' text",
+        "Verify button is disabled during loading",
+        "Confirm loading state ends when response received",
+        "Repeat for registration form ('Creating account...')",
+        "Test loading spinner on initial app load (auth initialization)"
+      ],
+      "expectedOutcome": "Loading indicators appear during all async operations, buttons disabled to prevent double-submission",
+      "failureCondition": "No loading indicators or users can submit multiple times",
+      "automated": true
+    },
+    {
+      "id": "dashboard-user-info-test",
+      "name": "Dashboard User Information Display",
+      "category": "functionality",
+      "priority": "medium",
+      "description": "Test that user information is correctly displayed in dashboard",
+      "steps": [
+        "Login as test user with known credentials",
+        "Navigate to dashboard",
+        "Verify welcome message includes user name: 'Welcome back, [Name]!'",
+        "Check email is displayed correctly",
+        "Verify user ID is shown",
+        "Confirm data matches the authenticated user",
+        "Verify data is pulled from Zustand store current_user object"
+      ],
+      "expectedOutcome": "User information accurately displayed in dashboard matching authenticated user data",
+      "failureCondition": "Wrong user info displayed or missing data",
+      "automated": true
+    },
+    {
+      "id": "profile-update-test",
+      "name": "User Profile Update",
+      "category": "functionality",
+      "priority": "medium",
+      "description": "Test user profile update functionality",
+      "steps": [
+        "Login as test user",
+        "Navigate to dashboard",
+        "Click 'Profile' link (if implemented in UI)",
+        "Or make direct API call to PUT /api/auth/profile",
+        "Update name field to new value: 'Updated Name'",
+        "Submit update",
+        "Verify success message: 'Profile updated successfully'",
+        "Confirm updated name appears in dashboard",
+        "Verify Zustand store updated with new name",
+        "Refresh page and confirm name persists"
+      ],
+      "expectedOutcome": "User profile updates successfully, changes persist and reflect across app",
+      "failureCondition": "Update fails or changes don't persist",
+      "automated": true,
+      "apiEndpoint": "PUT /api/auth/profile",
+      "note": "Profile update UI may not be fully implemented - test via API"
+    },
+    {
+      "id": "protected-endpoint-test",
+      "name": "Protected API Endpoint Access",
+      "category": "api",
+      "priority": "high",
+      "description": "Test access control on protected API endpoints",
+      "steps": [
+        "Obtain valid JWT token via login",
+        "Make GET request to /api/protected with Authorization: Bearer <token>",
+        "Verify 200 response with success message and user data",
+        "Make request without Authorization header",
+        "Verify 401 'Access token required' response",
+        "Make request with malformed token",
+        "Verify 403 'Invalid or expired token' response"
+      ],
+      "expectedOutcome": "Protected endpoints require valid JWT, reject requests without proper authentication",
+      "failureCondition": "Protected endpoints accessible without authentication",
+      "automated": true,
+      "apiEndpoint": "GET /api/protected"
+    },
+    {
+      "id": "api-me-endpoint-test",
+      "name": "Current User Endpoint",
+      "category": "api",
+      "priority": "medium",
+      "description": "Test /api/auth/me endpoint returns current user data",
+      "steps": [
+        "Login to obtain JWT token",
+        "Make GET request to /api/auth/me with valid token",
+        "Verify response contains user object",
+        "Check user object has id, email, name, created_at fields",
+        "Verify data matches logged-in user",
+        "Test without token, verify 401 error"
+      ],
+      "expectedOutcome": "Endpoint returns current authenticated user data when valid token provided",
+      "failureCondition": "Wrong user data returned or endpoint accessible without auth",
+      "automated": true,
+      "apiEndpoint": "GET /api/auth/me"
+    },
+    {
+      "id": "email-normalization-test",
+      "name": "Email Address Normalization",
+      "category": "validation",
+      "priority": "medium",
+      "description": "Test that email addresses are normalized (lowercase, trimmed)",
+      "steps": [
+        "Register user with email: ' TestUser@Example.COM '",
+        "Verify registration succeeds",
+        "Check email is stored as: 'testuser@example.com' (lowercase, trimmed)",
+        "Attempt to login with various formats:",
+        "  - 'TestUser@Example.COM'",
+        "  - 'testuser@example.com'",
+        "  - ' testuser@example.com '",
+        "Verify all formats successfully login to same account"
+      ],
+      "expectedOutcome": "Email addresses normalized to lowercase and trimmed, login works with any case variation",
+      "failureCondition": "Case-sensitive email matching or whitespace issues",
+      "automated": true
+    },
+    {
+      "id": "name-trimming-test",
+      "name": "Name Field Trimming",
+      "category": "validation",
+      "priority": "low",
+      "description": "Test that name field is trimmed of leading/trailing whitespace",
+      "steps": [
+        "Register with name: '  Test User  ' (spaces before and after)",
+        "Verify registration succeeds",
+        "Check stored name is: 'Test User' (trimmed)",
+        "Verify dashboard displays trimmed name without extra spaces"
+      ],
+      "expectedOutcome": "Name field properly trimmed before storage",
+      "failureCondition": "Extra whitespace stored in database",
+      "automated": true
+    },
+    {
+      "id": "toggle-login-register-test",
+      "name": "Toggle Between Login and Registration Modes",
+      "category": "interface",
+      "priority": "medium",
+      "description": "Test switching between login and registration forms",
+      "steps": [
+        "Navigate to login page (default mode)",
+        "Verify form shows email and password fields only",
+        "Verify heading: 'Sign in to your account'",
+        "Click 'Don't have an account? Sign up' link",
+        "Verify form now shows name, email, and password fields",
+        "Verify heading changes to: 'Create your account'",
+        "Verify button text changes to 'Create account'",
+        "Verify any error messages are cleared",
+        "Click 'Already have an account? Sign in'",
+        "Verify form returns to login mode",
+        "Confirm form fields and errors reset"
+      ],
+      "expectedOutcome": "Smooth transition between modes, form resets properly, errors cleared",
+      "failureCondition": "Mode doesn't switch or form state persists incorrectly",
+      "automated": true
+    },
+    {
+      "id": "responsive-design-test",
+      "name": "Responsive Design on Mobile Devices",
+      "category": "interface",
+      "priority": "medium",
+      "description": "Test application responsiveness on different screen sizes",
+      "steps": [
+        "Open application on desktop viewport (1920x1080)",
+        "Verify layout is centered with max-width constraint",
+        "Resize to tablet (768px width)",
+        "Verify form remains usable and properly sized",
+        "Resize to mobile (375px width)",
+        "Verify forms stack vertically",
+        "Check navigation buttons remain accessible",
+        "Test form inputs are appropriately sized for touch",
+        "Verify no horizontal scrolling occurs"
+      ],
+      "expectedOutcome": "Application is fully functional and visually correct on all screen sizes",
+      "failureCondition": "Layout breaks, elements overlap, or horizontal scroll appears",
+      "automated": false
+    },
+    {
+      "id": "jwt-expiration-test",
+      "name": "JWT Token Expiration Handling",
+      "category": "security",
+      "priority": "medium",
+      "description": "Test application behavior when JWT token expires (7-day expiration)",
+      "steps": [
+        "Generate JWT token",
+        "Note: Token expires in 7 days (as configured in server.ts)",
+        "Manually create expired token for testing",
+        "Store expired token in localStorage",
+        "Refresh application",
+        "Verify initialize_auth detects invalid token",
+        "Confirm user is logged out",
+        "Verify redirect to login page",
+        "Check auth state cleared from store"
+      ],
+      "expectedOutcome": "Expired tokens detected and user logged out automatically",
+      "failureCondition": "Expired tokens accepted or user remains logged in",
+      "automated": true,
+      "note": "May require manual token manipulation for testing"
+    },
+    {
+      "id": "password-security-test",
+      "name": "Password Hashing Security",
+      "category": "security",
+      "priority": "high",
+      "description": "Verify passwords are securely hashed using bcrypt",
+      "steps": [
+        "Register user with password: 'SecurePass123'",
+        "Query database directly or inspect API response",
+        "Verify password field contains bcrypt hash, not plain text",
+        "Check hash starts with '$2b$12$' (bcrypt with 12 salt rounds)",
+        "Verify hash length is 60 characters",
+        "Register same password for different user",
+        "Confirm hashes are different (salt is unique)",
+        "Attempt to login with correct password",
+        "Verify bcrypt.compare validates successfully"
+      ],
+      "expectedOutcome": "All passwords stored as bcrypt hashes, never in plain text",
+      "failureCondition": "Plain text passwords in database",
+      "automated": true,
+      "note": "Requires database access or backend testing"
+    },
+    {
+      "id": "cors-configuration-test",
+      "name": "CORS Configuration",
+      "category": "security",
+      "priority": "medium",
+      "description": "Test CORS is properly configured for frontend-backend communication",
+      "steps": [
+        "Make API request from frontend to backend",
+        "Verify request succeeds without CORS errors",
+        "Check response headers include appropriate CORS headers",
+        "Verify frontend URL is allowed origin",
+        "Test credentials: true configuration works",
+        "Make request from unauthorized origin",
+        "Verify request is blocked (if configured)"
+      ],
+      "expectedOutcome": "CORS properly configured, frontend can communicate with backend",
+      "failureCondition": "CORS errors prevent frontend-backend communication",
+      "automated": false,
+      "note": "CORS configured in backend/server.ts lines 80-83"
+    },
+    {
+      "id": "navigation-redirects-test",
+      "name": "Navigation and Redirect Behavior",
+      "category": "navigation",
+      "priority": "medium",
+      "description": "Test application routing and redirect logic",
+      "steps": [
+        "Navigate to root URL '/'",
+        "Verify redirect to /dashboard (if authenticated) or /login (if not)",
+        "Login successfully",
+        "Verify automatic redirect from /login to /dashboard",
+        "While logged in, attempt to navigate to /login",
+        "Verify behavior (allow or redirect to dashboard)",
+        "Test catch-all route '/*' redirects to appropriate page",
+        "Verify react-router-dom Navigate component works correctly"
+      ],
+      "expectedOutcome": "All navigation paths work correctly, appropriate redirects occur",
+      "failureCondition": "Navigation broken or incorrect redirects",
+      "automated": true
+    },
+    {
+      "id": "zustand-store-persistence-test",
+      "name": "Zustand Store Persistence Configuration",
+      "category": "functionality",
+      "priority": "medium",
+      "description": "Test Zustand persist middleware configuration",
+      "steps": [
+        "Login to set authentication state",
+        "Check localStorage for 'app-auth-storage' key",
+        "Verify stored data includes: current_user, auth_token, is_authenticated",
+        "Verify is_loading is NOT persisted (always false in storage)",
+        "Verify error_message is NOT persisted (always null in storage)",
+        "Clear Zustand store in-memory",
+        "Refresh page",
+        "Verify state rehydrated from localStorage",
+        "Confirm user remains authenticated"
+      ],
+      "expectedOutcome": "Only necessary auth data persisted, sensitive/temporary data excluded",
+      "failureCondition": "Incorrect data persisted or state not properly rehydrated",
+      "automated": true,
+      "note": "Persistence config in vitereact/src/store/main.tsx:237-251"
+    },
+    {
+      "id": "backend-health-check-test",
+      "name": "Backend Health Check Endpoint",
+      "category": "api",
+      "priority": "low",
+      "description": "Test backend is running and responding",
+      "steps": [
+        "Make GET request to https://123create-me-an-amazing-website.launchpulse.ai/",
+        "Verify 200 status code",
+        "Verify response JSON: { message: 'cofounder backend boilerplate :)' }",
+        "Confirm server is accessible"
+      ],
+      "expectedOutcome": "Backend responds with success message",
+      "failureCondition": "Backend not responding or error returned",
+      "automated": true,
+      "apiEndpoint": "GET /"
+    },
+    {
+      "id": "performance-load-time-test",
+      "name": "Application Load Time Performance",
+      "category": "performance",
+      "priority": "low",
+      "description": "Test application loads within acceptable time",
+      "steps": [
+        "Clear browser cache",
+        "Navigate to application URL",
+        "Measure time to interactive (TTI)",
+        "Measure first contentful paint (FCP)",
+        "Verify page loads in under 3 seconds on good connection",
+        "Check bundle sizes are optimized",
+        "Verify Vite build optimization applied"
+      ],
+      "expectedOutcome": "Application loads quickly with optimized assets",
+      "failureCondition": "Slow load times or large bundle sizes",
+      "automated": false,
+      "note": "Use browser DevTools or Lighthouse for measurement"
+    }
+  ],
+  "test_execution_notes": [
+    "Automated tests can be run using: npm test or npm run test:e2e",
+    "Some tests require manual execution for visual and UX verification",
+    "API tests can be automated using Jest + Supertest in backend",
+    "Frontend tests use Vitest + Testing Library",
+    "Create unique email addresses for each test run to avoid conflicts",
+    "Consider using test database for backend tests to avoid polluting production data",
+    "JWT tokens expire in 7 days - plan long-term tests accordingly"
+  ],
+  "priority_definitions": {
+    "critical": "Must pass - core functionality, blocks release if failing",
+    "high": "Should pass - important features, investigate failures promptly",
+    "medium": "Nice to pass - quality of life features, fix when possible",
+    "low": "Optional - non-critical features, fix if time permits"
+  }
+}

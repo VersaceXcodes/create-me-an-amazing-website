@@ -1,0 +1,476 @@
+{
+  "generated_at": "2025-12-06T10:30:00Z",
+  "project_name": "LaunchPulse Authentication App",
+  "description": "Full-stack authentication application with React frontend and Express backend",
+  "tech_stack": {
+    "frontend": [
+      "React 18.3.1",
+      "TypeScript 5.5.3",
+      "Vite 5.4.0",
+      "TailwindCSS 3.4.8",
+      "React Router 6.26.0",
+      "Zustand 5.0.9 (State Management)",
+      "TanStack React Query 5.0.0",
+      "Axios 1.7.7",
+      "Radix UI Components",
+      "Framer Motion 11.5.4",
+      "Zod 3.23.8 (Validation)"
+    ],
+    "backend": [
+      "Node.js",
+      "Express 4.19.2",
+      "TypeScript 5.8.2",
+      "PostgreSQL",
+      "PGlite 0.2.4 (In-memory DB for development)",
+      "JWT (jsonwebtoken 9.0.2)",
+      "Bcrypt.js 2.4.3",
+      "Dotenv 16.4.5"
+    ],
+    "testing": [
+      "Vitest 3.2.4",
+      "Jest 29.7.0",
+      "Testing Library (React)",
+      "Supertest 6.3.3"
+    ],
+    "deployment": [
+      "LaunchPulse Platform",
+      "Domain: 123create-me-an-amazing-website.launchpulse.ai"
+    ]
+  },
+  "architecture": {
+    "pattern": "Full-stack monorepo",
+    "state_management": "Zustand with persist middleware",
+    "authentication": "JWT-based authentication",
+    "api_communication": "REST API with Axios",
+    "routing": "React Router with protected routes"
+  },
+  "features": [
+    {
+      "name": "User Authentication",
+      "description": "Complete authentication system with registration, login, logout, and session management using JWT tokens",
+      "files": [
+        "backend/server.ts",
+        "vitereact/src/components/views/UV_Login.tsx",
+        "vitereact/src/store/main.tsx",
+        "vitereact/src/App.tsx"
+      ],
+      "endpoints": [
+        "POST /api/auth/register",
+        "POST /api/auth/login",
+        "GET /api/auth/verify",
+        "GET /api/auth/me"
+      ],
+      "status": "implemented"
+    },
+    {
+      "name": "User Registration",
+      "description": "New user registration with email validation, password hashing (bcrypt), and automatic login after registration",
+      "files": [
+        "backend/server.ts:150-202",
+        "vitereact/src/components/views/UV_Login.tsx:25-26",
+        "vitereact/src/store/main.tsx:101-149"
+      ],
+      "validation": [
+        "Email format validation",
+        "Password minimum 6 characters",
+        "Name required",
+        "Email uniqueness check"
+      ],
+      "status": "implemented"
+    },
+    {
+      "name": "User Login",
+      "description": "Secure login with email and password, bcrypt password verification, and JWT token generation",
+      "files": [
+        "backend/server.ts:205-249",
+        "vitereact/src/components/views/UV_Login.tsx:28",
+        "vitereact/src/store/main.tsx:51-99"
+      ],
+      "status": "implemented"
+    },
+    {
+      "name": "Protected Dashboard",
+      "description": "User dashboard accessible only to authenticated users, displays user information and profile",
+      "files": [
+        "vitereact/src/components/views/UV_Dashboard.tsx",
+        "vitereact/src/App.tsx:79-86"
+      ],
+      "features": [
+        "Display user name and email",
+        "Logout functionality",
+        "Profile link",
+        "Protected route wrapper"
+      ],
+      "status": "implemented"
+    },
+    {
+      "name": "Token Verification",
+      "description": "JWT token verification middleware for protected endpoints",
+      "files": [
+        "backend/server.ts:87-112",
+        "backend/server.ts:252-262"
+      ],
+      "status": "implemented"
+    },
+    {
+      "name": "Profile Management",
+      "description": "User profile update functionality (name updates)",
+      "files": [
+        "backend/server.ts:277-304"
+      ],
+      "endpoints": [
+        "PUT /api/auth/profile"
+      ],
+      "status": "implemented"
+    },
+    {
+      "name": "Session Persistence",
+      "description": "Persistent authentication state using Zustand persist middleware with localStorage",
+      "files": [
+        "vitereact/src/store/main.tsx:237-251"
+      ],
+      "features": [
+        "Auto-login on page refresh",
+        "Token verification on app initialization",
+        "Secure token storage"
+      ],
+      "status": "implemented"
+    },
+    {
+      "name": "Protected Routes",
+      "description": "Route protection mechanism that redirects unauthenticated users to login",
+      "files": [
+        "vitereact/src/App.tsx:28-42"
+      ],
+      "status": "implemented"
+    },
+    {
+      "name": "Error Handling",
+      "description": "Comprehensive error handling with user-friendly error messages",
+      "files": [
+        "vitereact/src/store/main.tsx:84-96",
+        "vitereact/src/components/views/UV_Login.tsx:55-59"
+      ],
+      "status": "implemented"
+    }
+  ],
+  "database": {
+    "type": "PostgreSQL / PGlite",
+    "tables": [
+      {
+        "name": "users",
+        "columns": [
+          {
+            "name": "id",
+            "type": "SERIAL PRIMARY KEY",
+            "description": "Unique user identifier"
+          },
+          {
+            "name": "email",
+            "type": "VARCHAR(255) UNIQUE NOT NULL",
+            "description": "User email address (unique, used for login)"
+          },
+          {
+            "name": "password",
+            "type": "VARCHAR(255) NOT NULL",
+            "description": "Bcrypt hashed password"
+          },
+          {
+            "name": "name",
+            "type": "VARCHAR(255) NOT NULL",
+            "description": "User full name"
+          },
+          {
+            "name": "created_at",
+            "type": "TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP",
+            "description": "Account creation timestamp"
+          },
+          {
+            "name": "updated_at",
+            "type": "TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP",
+            "description": "Last update timestamp"
+          }
+        ],
+        "indexes": [
+          "PRIMARY KEY on id",
+          "UNIQUE constraint on email"
+        ]
+      }
+    ],
+    "seed_data": "No seed data configured - users must register through the application"
+  },
+  "api_endpoints": [
+    {
+      "method": "POST",
+      "path": "/api/auth/register",
+      "description": "Register a new user account",
+      "authentication": "None (public)",
+      "request_body": {
+        "email": "string (required, valid email format)",
+        "password": "string (required, min 6 characters)",
+        "name": "string (required)"
+      },
+      "response": {
+        "201": {
+          "message": "User created successfully",
+          "user": {
+            "id": "number",
+            "email": "string",
+            "name": "string",
+            "created_at": "timestamp"
+          },
+          "token": "JWT token string"
+        },
+        "400": "Validation error or user already exists",
+        "500": "Internal server error"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "description": "Login with existing credentials",
+      "authentication": "None (public)",
+      "request_body": {
+        "email": "string (required)",
+        "password": "string (required)"
+      },
+      "response": {
+        "200": {
+          "message": "Login successful",
+          "user": {
+            "id": "number",
+            "email": "string",
+            "name": "string",
+            "created_at": "timestamp"
+          },
+          "token": "JWT token string"
+        },
+        "400": "Invalid email or password",
+        "500": "Internal server error"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/verify",
+      "description": "Verify JWT token validity",
+      "authentication": "Bearer token required",
+      "headers": {
+        "Authorization": "Bearer <token>"
+      },
+      "response": {
+        "200": {
+          "message": "Token is valid",
+          "user": {
+            "id": "number",
+            "email": "string",
+            "name": "string",
+            "created_at": "timestamp"
+          }
+        },
+        "401": "Access token required or user not found",
+        "403": "Invalid or expired token"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/me",
+      "description": "Get current authenticated user details",
+      "authentication": "Bearer token required",
+      "headers": {
+        "Authorization": "Bearer <token>"
+      },
+      "response": {
+        "200": {
+          "user": {
+            "id": "number",
+            "email": "string",
+            "name": "string",
+            "created_at": "timestamp"
+          }
+        },
+        "401": "Access token required or user not found",
+        "403": "Invalid or expired token"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/auth/profile",
+      "description": "Update user profile information",
+      "authentication": "Bearer token required",
+      "headers": {
+        "Authorization": "Bearer <token>"
+      },
+      "request_body": {
+        "name": "string (required)"
+      },
+      "response": {
+        "200": {
+          "message": "Profile updated successfully",
+          "user": {
+            "id": "number",
+            "email": "string",
+            "name": "string",
+            "created_at": "timestamp"
+          }
+        },
+        "400": "Name is required",
+        "401": "Access token required",
+        "403": "Invalid or expired token",
+        "500": "Internal server error"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/protected",
+      "description": "Example protected endpoint for demonstration",
+      "authentication": "Bearer token required",
+      "headers": {
+        "Authorization": "Bearer <token>"
+      },
+      "response": {
+        "200": {
+          "message": "This is a protected endpoint",
+          "user": {
+            "id": "number",
+            "email": "string",
+            "name": "string"
+          },
+          "timestamp": "ISO timestamp"
+        },
+        "401": "Access token required",
+        "403": "Invalid or expired token"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/",
+      "description": "Backend health check endpoint",
+      "authentication": "None (public)",
+      "response": {
+        "200": {
+          "message": "cofounder backend boilerplate :)"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/*",
+      "description": "Catch-all route serving the React SPA",
+      "authentication": "None",
+      "response": "Serves index.html for client-side routing"
+    }
+  ],
+  "environment_variables": {
+    "backend": [
+      "DATABASE_URL - PostgreSQL connection string (optional, uses PGlite if not set)",
+      "PGHOST - PostgreSQL host",
+      "PGDATABASE - PostgreSQL database name",
+      "PGUSER - PostgreSQL username",
+      "PGPASSWORD - PostgreSQL password",
+      "PGPORT - PostgreSQL port (default: 5432)",
+      "JWT_SECRET - Secret key for JWT signing (default: 'your-secret-key-change-in-production')",
+      "PORT - Server port (default: 3000)",
+      "FRONTEND_URL - Frontend URL for CORS (default: http://localhost:5173)"
+    ],
+    "frontend": [
+      "VITE_API_BASE_URL - Backend API base URL (default: http://localhost:3000)"
+    ]
+  },
+  "security": {
+    "password_hashing": "bcrypt with 12 salt rounds",
+    "jwt_expiration": "7 days",
+    "cors_enabled": true,
+    "ssl_support": "Enabled for production PostgreSQL",
+    "input_validation": [
+      "Email format validation",
+      "Password length validation (min 6 chars)",
+      "Email trimming and lowercase conversion",
+      "Name trimming"
+    ],
+    "authentication_flow": "JWT Bearer token in Authorization header"
+  },
+  "ui_components": {
+    "design_system": "Custom Tailwind CSS with Radix UI primitives",
+    "theme": "Light theme with blue accent colors",
+    "responsive": true,
+    "key_components": [
+      "Login/Register Form with toggle",
+      "Protected Route Wrapper",
+      "Loading Spinner",
+      "Error Message Display",
+      "Dashboard Navigation",
+      "Profile Display"
+    ]
+  },
+  "file_structure": {
+    "backend": {
+      "server.ts": "Main Express server with all routes and middleware",
+      "schema.ts": "Zod schema boilerplate (minimal usage)",
+      "db.sql": "Database schema definition",
+      "package.json": "Backend dependencies and scripts"
+    },
+    "frontend": {
+      "src/App.tsx": "Main app component with routing and protected routes",
+      "src/components/views/UV_Login.tsx": "Login and registration view",
+      "src/components/views/UV_Dashboard.tsx": "Protected dashboard view",
+      "src/store/main.tsx": "Zustand store with authentication state and actions",
+      "src/components/ui/": "Radix UI component library (multiple files)",
+      "package.json": "Frontend dependencies and scripts"
+    }
+  },
+  "testing_setup": {
+    "frontend": {
+      "framework": "Vitest with Testing Library",
+      "test_files": [
+        "vitereact/src/__tests__/auth.e2e.test.tsx"
+      ],
+      "test_commands": [
+        "npm test - Run all tests",
+        "npm run test:e2e - Run E2E auth tests",
+        "npm run test:ui - Run tests with UI"
+      ]
+    },
+    "backend": {
+      "framework": "Jest with Supertest",
+      "test_files": [
+        "backend/server.test.js"
+      ],
+      "test_commands": [
+        "npm test - Run all tests",
+        "npm run test:watch - Watch mode",
+        "npm run test:coverage - Coverage report"
+      ]
+    }
+  },
+  "deployment": {
+    "platform": "LaunchPulse",
+    "urls": {
+      "frontend": "https://123create-me-an-amazing-website.launchpulse.ai",
+      "backend": "https://123create-me-an-amazing-website.launchpulse.ai"
+    },
+    "build_process": {
+      "frontend": "vite build - Outputs to vitereact/dist",
+      "backend": "tsc - Compiles TypeScript to backend/dist"
+    }
+  },
+  "key_libraries": {
+    "state_management": "Zustand 5.0.9 with persist middleware",
+    "routing": "React Router 6.26.0",
+    "http_client": "Axios 1.7.7",
+    "ui_components": "Radix UI suite (accordion, dialog, dropdown, etc.)",
+    "styling": "TailwindCSS 3.4.8 with tailwindcss-animate",
+    "forms": "React Hook Form 7.53.0 with Zod resolver",
+    "animations": "Framer Motion 11.5.4",
+    "date_handling": "date-fns 3.0.0"
+  },
+  "notes": [
+    "Application uses PGlite for local development when DATABASE_URL is not set",
+    "JWT tokens are stored in localStorage via Zustand persist",
+    "Password must be at least 6 characters long",
+    "Email addresses are normalized to lowercase and trimmed",
+    "Backend serves the built frontend SPA in production",
+    "CORS is configured to allow requests from the Vite dev server",
+    "No user roles system implemented - all users have equal access",
+    "No seed data - users must register through the UI"
+  ]
+}

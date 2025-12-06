@@ -1,0 +1,255 @@
+{
+  "generated_at": "2025-12-06T20:01:00Z",
+  "application_url": "https://123create-me-an-amazing-website.launchpulse.ai",
+  "user_structure": {
+    "table_name": "users",
+    "role_field": "none",
+    "role_system": "Not implemented - all users have equal access",
+    "registration_endpoint": "/api/auth/register",
+    "login_endpoint": "/api/auth/login",
+    "authentication_method": "JWT Bearer Token",
+    "password_hashing": "bcrypt with 12 salt rounds",
+    "token_expiration": "7 days"
+  },
+  "database_schema": {
+    "table": "users",
+    "columns": [
+      "id - SERIAL PRIMARY KEY",
+      "email - VARCHAR(255) UNIQUE NOT NULL",
+      "password - VARCHAR(255) NOT NULL (bcrypt hashed)",
+      "name - VARCHAR(255) NOT NULL",
+      "created_at - TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP",
+      "updated_at - TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP"
+    ],
+    "notes": [
+      "No role/user_type field exists in current schema",
+      "All users have identical permissions",
+      "Email is unique and used as primary identifier",
+      "Passwords are never stored in plain text"
+    ]
+  },
+  "total_users": 4,
+  "verified_users": 4,
+  "creation_method": "API registration via POST /api/auth/register",
+  "verification_status": "All users successfully registered and login verified",
+  "users": [
+    {
+      "id": 11,
+      "email": "admin@test.com",
+      "password": "AdminPass123!",
+      "name": "Admin User",
+      "role": "user",
+      "role_note": "No role system implemented - 'admin' is name only, no special permissions",
+      "verified": true,
+      "created_via": "API",
+      "created_at": "2025-12-06T20:01:40.415Z",
+      "token_sample": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMSwiZW1haWwiOiJhZG1pbkB0ZXN0LmNvbSIsImlhdCI6MTc2NTA1MTMxOCwiZXhwIjoxNzY1NjU2MTE4fQ.andhw7KRAcnqqnOBb028kSIOtk-Os4AgkAzTTUX3D8U",
+      "login_verified": true,
+      "use_case": "Primary test user for admin-style testing scenarios"
+    },
+    {
+      "id": 12,
+      "email": "user@test.com",
+      "password": "UserPass123!",
+      "name": "Regular User",
+      "role": "user",
+      "verified": true,
+      "created_via": "API",
+      "created_at": "2025-12-06T20:01:44.817Z",
+      "token_sample": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMiwiZW1haWwiOiJ1c2VyQHRlc3QuY29tIiwiaWF0IjoxNzY1MDUxMzA0LCJleHAiOjE3NjU2NTYxMDR9.maW7Yry200RDxYvQyvI-FKv6iIiyrtCl-53oznGARFs",
+      "login_verified": true,
+      "use_case": "Standard user for general testing scenarios"
+    },
+    {
+      "id": 13,
+      "email": "testuser@test.com",
+      "password": "TestPass123!",
+      "name": "Test User",
+      "role": "user",
+      "verified": true,
+      "created_via": "API",
+      "created_at": "2025-12-06T20:01:49.299Z",
+      "token_sample": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMywiZW1haWwiOiJ0ZXN0dXNlckB0ZXN0LmNvbSIsImlhdCI6MTc2NTA1MTMwOSwiZXhwIjoxNzY1NjU2MTA5fQ.4UNFrqlYsUm2qKB25xnWcnzdBsh_HdjHDfVXtN9JaDs",
+      "login_verified": true,
+      "use_case": "Generic test user for various testing scenarios"
+    },
+    {
+      "id": 14,
+      "email": "guest@test.com",
+      "password": "GuestPass123!",
+      "name": "Guest User",
+      "role": "user",
+      "verified": true,
+      "created_via": "API",
+      "created_at": "2025-12-06T20:01:53.374Z",
+      "token_sample": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxNCwiZW1haWwiOiJndWVzdEB0ZXN0LmNvbSIsImlhdCI6MTc2NTA1MTMxMywiZXhwIjoxNzY1NjU2MTEzfQ.OhK18cjkb2UmzEuRFpJEaAnjNgGIMGeLzsx6kMmzqRw",
+      "login_verified": true,
+      "use_case": "Guest-style user for limited access testing"
+    }
+  ],
+  "by_role": {
+    "user": [
+      {
+        "email": "admin@test.com",
+        "password": "AdminPass123!",
+        "name": "Admin User",
+        "verified": true,
+        "id": 11
+      },
+      {
+        "email": "user@test.com",
+        "password": "UserPass123!",
+        "name": "Regular User",
+        "verified": true,
+        "id": 12
+      },
+      {
+        "email": "testuser@test.com",
+        "password": "TestPass123!",
+        "name": "Test User",
+        "verified": true,
+        "id": 13
+      },
+      {
+        "email": "guest@test.com",
+        "password": "GuestPass123!",
+        "name": "Guest User",
+        "verified": true,
+        "id": 14
+      }
+    ]
+  },
+  "quick_reference": {
+    "admin_credentials": {
+      "email": "admin@test.com",
+      "password": "AdminPass123!"
+    },
+    "regular_user_credentials": {
+      "email": "user@test.com",
+      "password": "UserPass123!"
+    },
+    "test_user_credentials": {
+      "email": "testuser@test.com",
+      "password": "TestPass123!"
+    },
+    "guest_credentials": {
+      "email": "guest@test.com",
+      "password": "GuestPass123!"
+    }
+  },
+  "usage_instructions": {
+    "login": "Use any of the above credentials to login via the web interface or API",
+    "api_login": "POST /api/auth/login with {\"email\": \"...\", \"password\": \"...\"}",
+    "token_usage": "Include token in Authorization header as: Bearer <token>",
+    "password_requirements": "Minimum 6 characters (all test passwords meet this)",
+    "email_format": "Valid email format required, case-insensitive",
+    "notes": [
+      "All users have been successfully created and verified",
+      "Login has been tested for all users",
+      "JWT tokens expire after 7 days",
+      "No role system exists - all users have equal permissions",
+      "Users persist in the production database"
+    ]
+  },
+  "additional_test_users": {
+    "description": "Additional users can be created for specific test scenarios",
+    "creation_example": {
+      "endpoint": "POST https://123create-me-an-amazing-website.launchpulse.ai/api/auth/register",
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "email": "newuser@example.com",
+        "password": "Password123!",
+        "name": "New User"
+      }
+    },
+    "considerations": [
+      "Email must be unique (not already registered)",
+      "Password must be at least 6 characters",
+      "Name field is required",
+      "Registration automatically returns JWT token",
+      "User is immediately logged in after registration"
+    ]
+  },
+  "test_scenarios": [
+    {
+      "scenario": "Valid login test",
+      "user": "admin@test.com / AdminPass123!",
+      "expected": "Successful login with JWT token returned"
+    },
+    {
+      "scenario": "Dashboard access test",
+      "user": "user@test.com / UserPass123!",
+      "steps": "Login → Navigate to /dashboard → Verify user info displayed"
+    },
+    {
+      "scenario": "Protected route test",
+      "user": "testuser@test.com / TestPass123!",
+      "steps": "Login → Access /api/protected → Verify 200 response with user data"
+    },
+    {
+      "scenario": "Logout test",
+      "user": "guest@test.com / GuestPass123!",
+      "steps": "Login → Logout → Verify redirect to /login and token cleared"
+    },
+    {
+      "scenario": "Token verification test",
+      "user": "admin@test.com / AdminPass123!",
+      "steps": "Login to get token → GET /api/auth/verify with token → Verify success"
+    },
+    {
+      "scenario": "Profile update test",
+      "user": "user@test.com / UserPass123!",
+      "steps": "Login → PUT /api/auth/profile with new name → Verify update successful"
+    }
+  ],
+  "security_notes": [
+    "These are TEST credentials only - not for production use",
+    "All passwords are securely hashed with bcrypt before storage",
+    "JWT tokens contain user_id and email, signed with JWT_SECRET",
+    "Tokens should be kept secure and not shared",
+    "For automated testing, generate fresh tokens as needed",
+    "Consider creating temporary test users for destructive tests"
+  ],
+  "api_reference": {
+    "endpoints": [
+      {
+        "method": "POST",
+        "path": "/api/auth/register",
+        "auth_required": false,
+        "description": "Register new user"
+      },
+      {
+        "method": "POST",
+        "path": "/api/auth/login",
+        "auth_required": false,
+        "description": "Login with credentials"
+      },
+      {
+        "method": "GET",
+        "path": "/api/auth/verify",
+        "auth_required": true,
+        "description": "Verify JWT token"
+      },
+      {
+        "method": "GET",
+        "path": "/api/auth/me",
+        "auth_required": true,
+        "description": "Get current user info"
+      },
+      {
+        "method": "PUT",
+        "path": "/api/auth/profile",
+        "auth_required": true,
+        "description": "Update user profile"
+      },
+      {
+        "method": "GET",
+        "path": "/api/protected",
+        "auth_required": true,
+        "description": "Example protected endpoint"
+      }
+    ]
+  }
+}
