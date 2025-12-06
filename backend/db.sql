@@ -1,5 +1,8 @@
 -- COMMANDS FOR DB TABLES
-CREATE TABLE IF NOT EXISTS userss (
+-- Drop old table with typo if it exists
+DROP TABLE IF EXISTS userss;
+
+CREATE TABLE IF NOT EXISTS users (
   id SERIAL PRIMARY KEY,
   email VARCHAR(255) UNIQUE NOT NULL,
   password VARCHAR(255) NOT NULL,
